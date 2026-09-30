@@ -1,0 +1,150 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{tesis}[2026/09/30 v1.0 Estilo modular para tesis]
+
+% Codificación, idioma y tipografía.
+\RequirePackage[utf8]{inputenc}
+\RequirePackage[T1]{fontenc}
+\RequirePackage[spanish,es-nodecimaldot]{babel}
+\RequirePackage{lmodern}
+\RequirePackage{microtype}
+
+% Composición y utilidades.
+\RequirePackage{geometry}
+\RequirePackage{setspace}
+\RequirePackage{xcolor}
+\RequirePackage{graphicx}
+\RequirePackage{booktabs}
+\RequirePackage{enumitem}
+\RequirePackage{titlesec}
+\RequirePackage{fancyhdr}
+\RequirePackage[most]{tcolorbox}
+\RequirePackage{csquotes}
+\RequirePackage[backend=biber,style=apa,sorting=nyt]{biblatex}
+\RequirePackage[hidelinks]{hyperref}
+\RequirePackage[nameinlink,noabbrev]{cleveref}
+
+% Paleta base. Puede sobrescribirse con \colorlet en configuracion.tex.
+\definecolor{AzulTesis}{HTML}{17365D}
+\definecolor{AzulClaroTesis}{HTML}{EAF1F8}
+\definecolor{RojoTesis}{HTML}{9C2F2F}
+\colorlet{ColorPrincipal}{AzulTesis}
+\colorlet{ColorSecundario}{AzulClaroTesis}
+\colorlet{ColorAdvertencia}{RojoTesis}
+
+% Parámetros generales.
+\setstretch{1.5}
+\setlength{\parindent}{1.25cm}
+\setlength{\parskip}{0pt}
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{2}
+
+\newcommand{\ConfiguracionMargenes}[4]{%
+  \geometry{top=#1,bottom=#2,inner=#3,outer=#4,headheight=15pt}%
+}
+
+% Metadatos de portada.
+\newcommand{\@TituloTesis}{Título de la tesis}
+\newcommand{\@AutorTesis}{Nombre del autor o autora}
+\newcommand{\@UniversidadTesis}{Universidad}
+\newcommand{\@FacultadTesis}{Facultad}
+\newcommand{\@ProgramaTesis}{Programa académico}
+\newcommand{\@DirectorTesis}{Director o directora}
+\newcommand{\@LugarTesis}{Ciudad, País}
+\newcommand{\@FechaTesis}{\the\year}
+\newcommand{\TituloTesis}[1]{\renewcommand{\@TituloTesis}{#1}}
+\newcommand{\AutorTesis}[1]{\renewcommand{\@AutorTesis}{#1}}
+\newcommand{\UniversidadTesis}[1]{\renewcommand{\@UniversidadTesis}{#1}}
+\newcommand{\FacultadTesis}[1]{\renewcommand{\@FacultadTesis}{#1}}
+\newcommand{\ProgramaTesis}[1]{\renewcommand{\@ProgramaTesis}{#1}}
+\newcommand{\DirectorTesis}[1]{\renewcommand{\@DirectorTesis}{#1}}
+\newcommand{\LugarTesis}[1]{\renewcommand{\@LugarTesis}{#1}}
+\newcommand{\FechaTesis}[1]{\renewcommand{\@FechaTesis}{#1}}
+
+\newcommand{\PortadaTesis}{%
+  \begin{titlepage}
+    \centering
+    {\large\bfseries \@UniversidadTesis\par}
+    \vspace{0.4cm}
+    {\large \@FacultadTesis\par}
+    {\large \@ProgramaTesis\par}
+    \vfill
+    {\color{ColorPrincipal}\Huge\bfseries \@TituloTesis\par}
+    \vspace{1.5cm}
+    {\Large \@AutorTesis\par}
+    \vfill
+    {\large Director(a): \@DirectorTesis\par}
+    \vspace{1.5cm}
+    {\large \@LugarTesis\par}
+    {\large \@FechaTesis\par}
+  \end{titlepage}%
+}
+
+% Títulos.
+\titleformat{\chapter}[display]
+  {\normalfont\bfseries\color{ColorPrincipal}}
+  {\filleft\Large\chaptertitlename\ \thechapter}
+  {1ex}
+  {\titlerule\vspace{1.2ex}\filright\Huge}
+\titleformat{\section}
+  {\normalfont\Large\bfseries\color{ColorPrincipal}}
+  {\thesection}{0.8em}{}
+\titleformat{\subsection}
+  {\normalfont\large\bfseries\color{ColorPrincipal}}
+  {\thesubsection}{0.8em}{}
+\titlespacing*{\chapter}{0pt}{-20pt}{35pt}
+
+% Listas y viñetas.
+\newcommand{\EstiloVinetaPrimerNivel}{\textcolor{ColorPrincipal}{\small\ensuremath{\blacksquare}}}
+\setlist[itemize,1]{label=\EstiloVinetaPrimerNivel,leftmargin=*,itemsep=0.25em}
+\setlist[itemize,2]{label=\textcolor{ColorPrincipal}{--},leftmargin=*,itemsep=0.15em}
+\setlist[enumerate]{leftmargin=*,itemsep=0.25em}
+
+% Encabezado y pie configurables.
+\newcommand{\@EncabezadoTesis}{}
+\newcommand{\@PieTesis}{}
+\newcommand{\EncabezadoTesis}[1]{\renewcommand{\@EncabezadoTesis}{#1}}
+\newcommand{\PieTesis}[1]{\renewcommand{\@PieTesis}{#1}}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\nouppercase{\@EncabezadoTesis}}
+\fancyhead[R]{\small\nouppercase{\leftmark}}
+\fancyfoot[L]{\small\@PieTesis}
+\fancyfoot[R]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \fancyfoot[L]{\small\@PieTesis}%
+  \fancyfoot[R]{\thepage}%
+  \renewcommand{\headrulewidth}{0pt}%
+}
+
+% Bloques reutilizables.
+\newtcolorbox{bloque}[1][Nota]{
+  enhanced,breakable,title=#1,
+  colback=ColorSecundario,colframe=ColorPrincipal,
+  fonttitle=\bfseries,boxrule=0.8pt,arc=1mm,
+  left=4mm,right=4mm,top=2mm,bottom=2mm
+}
+\newtcolorbox{definicion}[1][Definición]{
+  enhanced,breakable,title=#1,
+  colback=white,colframe=ColorPrincipal,
+  fonttitle=\bfseries,boxrule=0pt,borderline west={2pt}{0pt}{ColorPrincipal},
+  sharp corners,left=4mm
+}
+\newtcolorbox{advertencia}[1][Importante]{
+  enhanced,breakable,title=#1,
+  colback=ColorAdvertencia!5,colframe=ColorAdvertencia,
+  fonttitle=\bfseries,boxrule=0.8pt,arc=1mm
+}
+\newenvironment{citaacademica}
+  {\begin{quote}\itshape\color{black!75}}
+  {\end{quote}}
+
+% Nombres en español para referencias cruzadas.
+\crefname{chapter}{capítulo}{capítulos}
+\crefname{section}{sección}{secciones}
+\crefname{figure}{figura}{figuras}
+\crefname{table}{tabla}{tablas}
+
+\endinput
